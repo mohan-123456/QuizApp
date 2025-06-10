@@ -26,36 +26,37 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public class QuizController {
 	@Autowired
 	QuestionService questionService;
+	@Operation(summary = "Get all questions")
 	@GetMapping("/allQuestions")
 	public  ResponseEntity<List<Question>> getAllQuestions() {
 		return new ResponseEntity(questionService.getAllQuestions(),HttpStatus.OK);
 	}
-	
+	@Operation(summary = "Get questions by category")
 	@GetMapping("category/{category}")
 	public ResponseEntity<List<Question>> getQuestionsByCategory(@PathVariable String category)
 	{
 		return new ResponseEntity(questionService.getQuestionsByCategory(category),HttpStatus.OK);
 	
 	}
-	
+	@Operation(summary = "Add a new question")
 	@PostMapping("addQuestion")
 	public ResponseEntity<String> addQuestion(@RequestBody Question question)
 	{
 		return new ResponseEntity(questionService.addQuestion(question),HttpStatus.CREATED);
 	}
-	
+	@Operation(summary = "Generate quiz question IDs by category and number of questions")
 	@GetMapping("generate")
     public ResponseEntity<List<Integer>> getQuestionsForQuiz
             (@RequestParam String categoryName, @RequestParam Integer numQuestions ){
         return questionService.getQuestionsForQuiz(categoryName, numQuestions);
     }
-
+    @Operation(summary = "Get full question details by question ID list")
     @PostMapping("getQuestions")
     public ResponseEntity<List<QuestionWrapper>> getQuestionsFromId(@RequestBody List<Integer> questionIds){
         //System.out.println(environment.getProperty("local.server.port"));
         return questionService.getQuestionsFromId(questionIds);
     }
-
+    @Operation(summary = "Calculate score based on user's answers")
     @PostMapping("getScore")
     public ResponseEntity<Integer> getScore(@RequestBody List<Response> responses)
     {
